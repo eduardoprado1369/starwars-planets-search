@@ -6,16 +6,35 @@ function Provider({ children }) {
   const [data, setData] = useState([]);
   const [fetchedData, setFetchedData] = useState([]);
   const [nameFilter, setNameFilter] = useState('');
-  const [columnFilter, setColumnFilter] = useState('');
-  const [comparisonFilter, setComparisonFilter] = useState('');
-  const [valueFilter, setValueFilter] = useState('');
+  const [columnFilter, setColumnFilter] = useState('population');
+  const [comparisonFilter, setComparisonFilter] = useState('>');
+  const [valueFilter, setValueFilter] = useState(0);
 
   const filterArray = () => {
-    console.log(nameFilter, fetchedData);
     const planets = nameFilter.length
       ? fetchedData.filter((i) => i.name.includes(nameFilter))
       : fetchedData;
 
+    console.log(columnFilter, comparisonFilter, valueFilter);
+    // console.log('chegou');
+
+    if (columnFilter && comparisonFilter && valueFilter) {
+      if (comparisonFilter === '>') {
+        console.log(comparisonFilter);
+        return setData(planets
+          .filter((i) => Number(i[columnFilter]) > Number(valueFilter)));
+      } if (comparisonFilter === '<') {
+        console.log(comparisonFilter, columnFilter);
+        return setData(planets
+          .filter((i) => Number(i[columnFilter]) < Number(valueFilter)));
+      } if (comparisonFilter === '===') {
+        console.log(comparisonFilter);
+        return setData(planets
+          .filter((i) => Number(i[columnFilter]) === Number(valueFilter)));
+      }
+    }
+    console.log(planets);
+    console.log(data);
     setData(planets);
   };
 
@@ -41,7 +60,7 @@ function Provider({ children }) {
 
   useEffect(() => {
     filterArray();
-  }, [nameFilter, fetchedData]);
+  }, [nameFilter, fetchedData, columnFilter, comparisonFilter, valueFilter]);
 
   const contextValue = {
     data,

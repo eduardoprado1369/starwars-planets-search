@@ -2,26 +2,34 @@ import React, { useContext, useState } from 'react';
 import MyContext from '../Context';
 
 function Table() {
-  const { data, nameFilter, setNameFilter } = useContext(MyContext);
-  const { columnFilter, setColumnFilter } = useState();
-  const { comparisonFilter, setComparisonFilter } = useState();
-  const { valueFilter, setValueFilter } = useState();
+  const { data, nameFilter, setNameFilter, setColumnFilter,
+    setComparisonFilter, setValueFilter } = useContext(MyContext);
+  const [columnFilterState, setColumnFilterState] = useState('population');
+  const [comparisonFilterState, setComparisonFilterState] = useState('>');
+  const [valueFilterState, setValueFilterState] = useState(0);
 
   const handleNameFilter = (e) => {
     setNameFilter(e.target.value);
   };
 
   const handleColumnFilter = ({ target }) => {
-    setColumnFilter(target.value);
+    setColumnFilterState(target.value);
   };
   const handleComparisonFilter = ({ target }) => {
-    setComparisonFilter(target.value);
+    setComparisonFilterState(target.value);
   };
   const handleValueFilter = ({ target }) => {
-    setValueFilter(target.value);
+    setValueFilterState(target.value);
   };
 
-  console.log(data);
+  const sendFilters = () => {
+    // e.preventDefault();
+    setColumnFilter(columnFilterState);
+    setComparisonFilter(comparisonFilterState);
+    setValueFilter(Number(valueFilterState));
+  };
+
+  // console.log(data);
   return (
     <div>
       <label htmlFor="nameFilter ">
@@ -63,7 +71,7 @@ function Table() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ (e) => e.preventDefault }
+          onClick={ sendFilters }
         >
           Pesquisar
         </button>
