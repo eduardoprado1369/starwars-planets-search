@@ -2,72 +2,153 @@ import React, { useContext, useState } from 'react';
 import MyContext from '../Context';
 
 function Table() {
-  const { data, nameFilter, setNameFilter, setColumnFilter,
-    setComparisonFilter, setValueFilter } = useContext(MyContext);
+  const { data, nameFilter, setNameFilter, filters, setFilters } = useContext(MyContext);
   const [columnFilterState, setColumnFilterState] = useState('population');
-  const [comparisonFilterState, setComparisonFilterState] = useState('>');
+  const [comparisonFilterState, setComparisonFilterState] = useState('maior que');
   const [valueFilterState, setValueFilterState] = useState(0);
-
-  const handleNameFilter = (e) => {
-    setNameFilter(e.target.value);
-  };
-
-  const handleColumnFilter = ({ target }) => {
-    setColumnFilterState(target.value);
-  };
-  const handleComparisonFilter = ({ target }) => {
-    setComparisonFilterState(target.value);
-  };
-  const handleValueFilter = ({ target }) => {
-    setValueFilterState(target.value);
-  };
+  // const [thereIsPopulationFilter, setThereIsPopulationFilter] = useState(false);
+  // const [thereIsOrbitalFilter, setThereIsOrbitalFilter] = useState(false);
+  // const [thereIsDiameterFilter, setThereIsDiameterFilter] = useState(false);
+  // const [thereIsRotationFilter, setThereIsRotationFilter] = useState(false);
+  // const [thereIsSurfaceFilter, setThereIsSurfaceFilter] = useState(false);
+  // const [timesPopulationFilter, setTimesPopulationFilter] = useState(0);
+  // const [timesOrbitalFilter, setTimesOrbitalFilter] = useState(0);
+  // const [timesDiameterFilter, setTimesDiameterFilter] = useState(0);
+  // const [timesRotationFilter, setTimesRotationFilter] = useState(0);
+  // const [timesSurfaceFilter, setTimesSurfaceFilter] = useState(0);
+  const [columnsOptions, setColumnsOptions] = useState(['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surfac_water']);
 
   const sendFilters = () => {
-    // e.preventDefault();
-    setColumnFilter(columnFilterState);
-    setComparisonFilter(comparisonFilterState);
-    setValueFilter(Number(valueFilterState));
+    const currentFilter = {
+      column: columnFilterState,
+      comparison: comparisonFilterState,
+      value: valueFilterState,
+    };
+    setFilters([...filters, currentFilter]);
+    const filteredColumns = columnsOptions.filter((item) => item !== columnFilterState);
+    setColumnsOptions(filteredColumns);
+    setColumnFilterState(filteredColumns[0]);
   };
+
+  // const unableExistingFilters = () => {
+  //   console.log(timesPopulationFilter);
+  //   console.log('entrou no unableexistingfilters');
+  //   if (timesPopulationFilter > 0) {
+  //     setThereIsPopulationFilter(true);
+  //   } else { setThereIsPopulationFilter(false); }
+  //   if (timesOrbitalFilter > 0) {
+  //     setThereIsOrbitalFilter(true);
+  //   } else { setThereIsOrbitalFilter(false); }
+  //   if (timesDiameterFilter > 0) {
+  //     setThereIsDiameterFilter(true);
+  //   } else { setThereIsDiameterFilter(false); }
+  //   if (timesRotationFilter > 0) {
+  //     setThereIsRotationFilter(true);
+  //   } else { setThereIsRotationFilter(false); }
+  //   if (timesSurfaceFilter > 0) {
+  //     setThereIsSurfaceFilter(true);
+  //   } else { setThereIsSurfaceFilter(false); }
+  //   setTimesPopulationFilter(0);
+  //   setTimesOrbitalFilter(0);
+  //   setTimesDiameterFilter(0);
+  //   setTimesRotationFilter(0);
+  //   setTimesSurfaceFilter(0);
+  // };
+
+  // const checkExistingFilters = () => {
+  //   console.log(filters);
+  //   if (filters.length) {
+  // setTimesPopulationFilter((prevState) => prevState + 1);
+  // filters.forEach((i) => {
+  //   if (i.column === 'population') {
+  //     console.log('entrou no population');
+  //     return setTimesPopulationFilter((prevState) => prevState + 1);
+  //   }
+  //   if (i.column === 'orbital_period') {
+  //     return setTimesOrbitalFilter(timesOrbitalFilter + 1);
+  //   }
+  //   if (i.column === 'diameter') {
+  //     return setTimesDiameterFilter(timesDiameterFilter + 1);
+  //   }
+  //   if (i.column === 'rotation_period') {
+  //     return setTimesRotationFilter(timesRotationFilter + 1);
+  //   }
+  //   return setTimesSurfaceFilter(timesSurfaceFilter + 1);
+  // });
+  //   }
+  //   unableExistingFilters();
+  // };
+
+  const removeFilters = (currColumn) => {
+    setFilters(filters.filter((i) => i.column !== currColumn));
+    setValueFilterState('');
+  };
+
+  const removeAllFilters = () => {
+    setFilters([]);
+    setValueFilterState('');
+  };
+
+  // useEffect(() => {
+  //   console.log(`entrou no userEffect + ${filters[0]}`);
+  //   console.log(filters);
+  //   checkExistingFilters();
+  // }, [filters]);
 
   // console.log(data);
   return (
     <div>
-      <label htmlFor="nameFilter ">
-        Filtro
-        <input
-          type="text"
-          id="nameFilter"
-          data-testid="name-filter"
-          value={ nameFilter }
-          onChange={ handleNameFilter }
-        />
-      </label>
+      <form>
+        <label htmlFor="nameFilter">
+          Filtro
+          <input
+            type="text"
+            id="nameFilter"
+            data-testid="name-filter"
+            value={ nameFilter }
+            onChange={ ({ target }) => setNameFilter(target.value) }
+          />
+        </label>
+      </form>
       <form>
         <label htmlFor="selectColumn">
           <select
-            onChange={ handleColumnFilter }
+            onChange={ ({ target }) => setColumnFilterState(target.value) }
             data-testid="column-filter"
             id="selectColumn"
+            value={ columnFilterState }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {columnsOptions.map((item) => (
+              <option value={ item } key={ item }>{item}</option>
+            ))}
+            {/* {!thereIsPopulationFilter && <option value="population">population</option>}
+            {!thereIsOrbitalFilter
+             && <option value="orbital_period">orbital_period</option>}
+            {!thereIsDiameterFilter && <option value="diameter">diameter</option>}
+            {!thereIsRotationFilter
+             && <option value="rotation_period">rotation_period</option>}
+            {!thereIsSurfaceFilter
+             && <option value="surface_water">surface_water</option>} */}
           </select>
         </label>
         <label htmlFor="selectComparison">
           <select
-            onChange={ handleComparisonFilter }
+            onChange={ ({ target }) => setComparisonFilterState(target.value) }
             data-testid="comparison-filter"
             id="selectColumn"
           >
-            <option value=">">maior que</option>
-            <option value="<">menor que</option>
-            <option value="===">igual a</option>
+            <option value="maior que">maior que</option>
+            <option value="menor que">menor que</option>
+            <option value="igual a">igual a</option>
           </select>
         </label>
-        <input onChange={ handleValueFilter } data-testid="value-filter" type="number" />
+        <input
+          onChange={ ({ target }) => setValueFilterState(target.value) }
+          data-testid="value-filter"
+          type="number"
+          value={ valueFilterState }
+        />
         <button
           data-testid="button-filter"
           type="button"
@@ -76,6 +157,36 @@ function Table() {
           Pesquisar
         </button>
       </form>
+      <button
+        type="button"
+        // onClick={ () => setFilters([]) && setValueFilterState('') }
+        onClick={ removeAllFilters }
+        data-testid="button-remove-filters"
+      >
+        Remover todas as filtragens
+
+      </button>
+      {filters.length > 0 && filters.map((el, index) => (
+        <div data-testid="filter" key={ index }>
+          {`${el.column} ${el.comparison} ${el.value}`}
+          <button
+            type="button"
+            onClick={ () => removeFilters(el.column) }
+          >
+            Apagar
+          </button>
+          {/* {index === 0 && (
+            <button
+              type="button"
+              // onClick={ () => setFilters([]) && setValueFilterState('') }
+              onClick={ removeAllFilters }
+              data-testid="button-remove-filters"
+            >
+              Remover todas as filtragens
+
+            </button>)} */}
+        </div>
+      ))}
       <table>
         <tr>
           {data.length && Object.keys(data[0]).map((i) => (
