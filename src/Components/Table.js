@@ -17,7 +17,7 @@ function Table() {
   // const [timesRotationFilter, setTimesRotationFilter] = useState(0);
   // const [timesSurfaceFilter, setTimesSurfaceFilter] = useState(0);
   const [columnsOptions, setColumnsOptions] = useState(['population', 'orbital_period',
-    'diameter', 'rotation_period', 'surfac_water']);
+    'diameter', 'rotation_period', 'surface_water']);
 
   const sendFilters = () => {
     const currentFilter = {
