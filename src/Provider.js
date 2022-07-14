@@ -6,9 +6,6 @@ function Provider({ children }) {
   const [data, setData] = useState([]);
   const [fetchedData, setFetchedData] = useState([]);
   const [nameFilter, setNameFilter] = useState('');
-  // const [columnFilter, setColumnFilter] = useState('population');
-  // const [comparisonFilter, setComparisonFilter] = useState('>');
-  // const [valueFilter, setValueFilter] = useState(0);
   const [filters, setFilters] = useState([]);
 
   const filterArray = () => {
@@ -24,11 +21,9 @@ function Provider({ children }) {
       filters.forEach((filter) => {
         console.log(filter.comparison);
         if (filter.comparison === 'maior que') {
-          // console.log(filter);
           filteredPlanets = filteredPlanets
             .filter((i) => Number(i[filter.column]) > Number(filter.value));
         } if (filter.comparison === 'menor que') {
-          console.log('entrou no menor que');
           filteredPlanets = filteredPlanets
             .filter((i) => Number(i[filter.column]) < Number(filter.value));
         } if (filter.comparison === 'igual a') {
@@ -38,17 +33,11 @@ function Provider({ children }) {
       });
       setData(filteredPlanets);
     }
-    // console.log(data);
   };
 
   const fetchAPI = async () => {
     const fetchItems = await fetch('https://swapi-trybe.herokuapp.com/api/planets/');
     const fetchJSON = await fetchItems.json();
-    // fetchJSON.results.forEach((item) => console.log(Object.keys(item)));
-    // const planets = filter.length ? planetsfilter((i) => i.name.includes(nameFilter))
-    //   : fetchJSON.results.filter((i) => delete i.residents);
-    // nameFilter.length && planets = planetsfilter((item) => item.name.includes(nameFilter))
-    // setData(planets);
     const planets = fetchJSON.results.map((i) => {
       delete i.residents;
       return i;
@@ -71,13 +60,6 @@ function Provider({ children }) {
     setNameFilter,
     filters,
     setFilters,
-    // columnFilter,
-    // setColumnFilter,
-    // comparisonFilter,
-    // setComparisonFilter,
-    // valueFilter,
-    // setValueFilter,
-
   };
 
   return (

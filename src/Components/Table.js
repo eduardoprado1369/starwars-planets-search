@@ -6,16 +6,6 @@ function Table() {
   const [columnFilterState, setColumnFilterState] = useState('population');
   const [comparisonFilterState, setComparisonFilterState] = useState('maior que');
   const [valueFilterState, setValueFilterState] = useState(0);
-  // const [thereIsPopulationFilter, setThereIsPopulationFilter] = useState(false);
-  // const [thereIsOrbitalFilter, setThereIsOrbitalFilter] = useState(false);
-  // const [thereIsDiameterFilter, setThereIsDiameterFilter] = useState(false);
-  // const [thereIsRotationFilter, setThereIsRotationFilter] = useState(false);
-  // const [thereIsSurfaceFilter, setThereIsSurfaceFilter] = useState(false);
-  // const [timesPopulationFilter, setTimesPopulationFilter] = useState(0);
-  // const [timesOrbitalFilter, setTimesOrbitalFilter] = useState(0);
-  // const [timesDiameterFilter, setTimesDiameterFilter] = useState(0);
-  // const [timesRotationFilter, setTimesRotationFilter] = useState(0);
-  // const [timesSurfaceFilter, setTimesSurfaceFilter] = useState(0);
   const [columnsOptions, setColumnsOptions] = useState(['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water']);
 
@@ -31,55 +21,6 @@ function Table() {
     setColumnFilterState(filteredColumns[0]);
   };
 
-  // const unableExistingFilters = () => {
-  //   console.log(timesPopulationFilter);
-  //   console.log('entrou no unableexistingfilters');
-  //   if (timesPopulationFilter > 0) {
-  //     setThereIsPopulationFilter(true);
-  //   } else { setThereIsPopulationFilter(false); }
-  //   if (timesOrbitalFilter > 0) {
-  //     setThereIsOrbitalFilter(true);
-  //   } else { setThereIsOrbitalFilter(false); }
-  //   if (timesDiameterFilter > 0) {
-  //     setThereIsDiameterFilter(true);
-  //   } else { setThereIsDiameterFilter(false); }
-  //   if (timesRotationFilter > 0) {
-  //     setThereIsRotationFilter(true);
-  //   } else { setThereIsRotationFilter(false); }
-  //   if (timesSurfaceFilter > 0) {
-  //     setThereIsSurfaceFilter(true);
-  //   } else { setThereIsSurfaceFilter(false); }
-  //   setTimesPopulationFilter(0);
-  //   setTimesOrbitalFilter(0);
-  //   setTimesDiameterFilter(0);
-  //   setTimesRotationFilter(0);
-  //   setTimesSurfaceFilter(0);
-  // };
-
-  // const checkExistingFilters = () => {
-  //   console.log(filters);
-  //   if (filters.length) {
-  // setTimesPopulationFilter((prevState) => prevState + 1);
-  // filters.forEach((i) => {
-  //   if (i.column === 'population') {
-  //     console.log('entrou no population');
-  //     return setTimesPopulationFilter((prevState) => prevState + 1);
-  //   }
-  //   if (i.column === 'orbital_period') {
-  //     return setTimesOrbitalFilter(timesOrbitalFilter + 1);
-  //   }
-  //   if (i.column === 'diameter') {
-  //     return setTimesDiameterFilter(timesDiameterFilter + 1);
-  //   }
-  //   if (i.column === 'rotation_period') {
-  //     return setTimesRotationFilter(timesRotationFilter + 1);
-  //   }
-  //   return setTimesSurfaceFilter(timesSurfaceFilter + 1);
-  // });
-  //   }
-  //   unableExistingFilters();
-  // };
-
   const removeFilters = (currColumn) => {
     setFilters(filters.filter((i) => i.column !== currColumn));
     setValueFilterState('');
@@ -90,13 +31,6 @@ function Table() {
     setValueFilterState('');
   };
 
-  // useEffect(() => {
-  //   console.log(`entrou no userEffect + ${filters[0]}`);
-  //   console.log(filters);
-  //   checkExistingFilters();
-  // }, [filters]);
-
-  // console.log(data);
   return (
     <div>
       <form>
@@ -122,14 +56,6 @@ function Table() {
             {columnsOptions.map((item) => (
               <option value={ item } key={ item }>{item}</option>
             ))}
-            {/* {!thereIsPopulationFilter && <option value="population">population</option>}
-            {!thereIsOrbitalFilter
-             && <option value="orbital_period">orbital_period</option>}
-            {!thereIsDiameterFilter && <option value="diameter">diameter</option>}
-            {!thereIsRotationFilter
-             && <option value="rotation_period">rotation_period</option>}
-            {!thereIsSurfaceFilter
-             && <option value="surface_water">surface_water</option>} */}
           </select>
         </label>
         <label htmlFor="selectComparison">
@@ -159,7 +85,6 @@ function Table() {
       </form>
       <button
         type="button"
-        // onClick={ () => setFilters([]) && setValueFilterState('') }
         onClick={ removeAllFilters }
         data-testid="button-remove-filters"
       >
@@ -175,16 +100,6 @@ function Table() {
           >
             Apagar
           </button>
-          {/* {index === 0 && (
-            <button
-              type="button"
-              // onClick={ () => setFilters([]) && setValueFilterState('') }
-              onClick={ removeAllFilters }
-              data-testid="button-remove-filters"
-            >
-              Remover todas as filtragens
-
-            </button>)} */}
         </div>
       ))}
       <table>

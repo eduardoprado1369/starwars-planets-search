@@ -1,5 +1,5 @@
 import React from 'react';
-import { getByDisplayValue, render, screen } from '@testing-library/react';
+import { getByDisplayValue, getByTestId, render, screen } from '@testing-library/react';
 import App from '../App';
 import testData from '../../cypress/mocks/testData';
 import userEvent from '@testing-library/user-event';
@@ -55,8 +55,6 @@ describe('Testa a aplicação', () => {
     expect(populationOption).not.toBeInTheDocument()
 
     const deleteButton = screen.getByRole('button', { name: /apagar/i})
-    const deleteAllButton = screen.getByRole('button', { name: /Remover todas as filtragens/i})
-    expect(deleteButton).toBeInTheDocument()
 
     userEvent.click(deleteButton)
 
@@ -89,5 +87,55 @@ describe('Testa a aplicação', () => {
 
     expect(endoor).toBeInTheDocument()
     expect(diameterOption).not.toBeInTheDocument()
+
+    const deleteAllButton = screen.getByRole('button', { name: /Remover todas as filtragens/i})
+    expect(deleteAllButton).toBeInTheDocument()
+
+    userEvent.click(orbitalPeriodOption)
+    userEvent.click(lessThanOption)
+
+    expect(orbitalPeriodOption.selected).toBeTruthy
+
+    userEvent.type(valueFilter, 1000)
+    userEvent.click(filterButton)
+    userEvent.click(populationOption)
+    userEvent.click(biggerThanOption)
+    userEvent.type(valueFilter, 1000000)
+    userEvent.click(filterButton)
+
+    expect(endoor).toBeInTheDocument()
+    expect(naboo).toBeInTheDocument()
+    
+    userEvent.click(deleteAllButton)
+
+    expect(tatooine).toBeInTheDocument()
+
+    const comparisonFilter = screen.getByTestId('comparison-filter')
+    expect(comparisonFilter).toBeInTheDocument()
+
+    userEvent.click(populationOption)
+    userEvent.click(lessThanOption)
+    userEvent.type(valueFilter, '1000000')
+    userEvent.click(filterButton)
+
+    expect(screen.getByText('undefined maior que 1000000')).toBeInTheDocument()
+
+   // expect(screen.getByRole('button', { name: /Remover todas as filtragens/i}).selected).toBeTruthy()
   })
+  it('Testa se aparece escrito o filtro selecionado', () => {
+    const populationOption = screen.getByRole('option', { name:/population/i })
+    const lessThanOption = screen.getByRole('option', { name:/menor que/i })
+    const valueFilter = screen.getByTestId('value-filter')
+    const filterButton = screen.getByRole('button', { name: /pesquisar/i})
+    const comparisonFilter = screen.getByTestId('comparison-filter')
+
+    userEvent.click(populationOption)
+    userEvent.selectOptions(comparisonFilter, 'menor que');
+    // userEvent.click(lessThanOption)
+    userEvent.type(valueFilter, '1000000')
+    userEvent.click(filterButton)
+    
+    expect(screen.getByText('population menor que 01000000')).toBeInTheDocument()
+  })
+
 });
